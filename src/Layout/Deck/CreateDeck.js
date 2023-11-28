@@ -1,33 +1,33 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { createDeck } from "../../utils/api";
-
-import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { createDeck } from "../../utils/api";
 
 function CreateDeck() {
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-  });
   const history = useHistory();
 
-  const changeHandler = (event) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  const initialState = {
+    name: "",
+    description: "",
   };
 
-  const handleSubmit = async (event) => {
+  const [formData, setFormData] = useState(initialState);
+
+  function changeHandler({ target }) {
+    setFormData({
+      ...formData,
+      [target.name]: target.value,
+    });
+  }
+
+  async function handleSubmit(event) {
     event.preventDefault();
-    const addData = await createDeck(formData);
-    history.push(`/decks/${addData.id}`);
-  };
+    const abortController = new AbortController();
+    const response = await createDeck({ ...formData }, abortController.signal);
+    history.push("/");
+    return response;
+  }
 
-  function handleReset() {
+  async function handleCancel() {
     history.push("/");
   }
 
@@ -83,4 +83,3 @@ function CreateDeck() {
 }
 
 export default CreateDeck;
-
