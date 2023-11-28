@@ -2,30 +2,41 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { createDeck } from "../../utils/api";
 
+import React, { useState } from "react";
+import { useHistory, Link } from "react-router-dom";
+import { createDeck } from "../../utils/api";
+
 function CreateDeck() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
   });
+  const history = useHistory();
 
-  const changeHandler = ({ target }) =>
-    setFormData({
-      ...formData,
-      [target.name]: target.value,
-    });
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    createDeck(formData);
-    setFormData({ name: "", description: "" });
+  const changeHandler = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const addData = await createDeck(formData);
+    history.push(`/decks/${addData.id}`);
+  };
+
+  function handleReset() {
+    history.push("/");
+  }
 
   return (
     <div>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <li className="breadcrumb-item">
-            <a href="/">Home</a>
+            <a to="/">Home</a>
           </li>
           <li className="breadcrumb-item active" aria-current="page">
             Create Deck
@@ -72,3 +83,4 @@ function CreateDeck() {
 }
 
 export default CreateDeck;
+
