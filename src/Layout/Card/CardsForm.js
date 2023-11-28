@@ -28,8 +28,8 @@ function CardsForm({ formData, setFormData, submit }) {
         ></textarea>
       </div>
       <Link to="../">
-        <button value="Cancel" className="btn btn-secondary mx-3">
-          Cancel
+        <button value="Done" className="btn btn-secondary mx-3">
+          Done
         </button>
       </Link>
       <button className="btn btn-primary mx-2" onClick={submit}>
